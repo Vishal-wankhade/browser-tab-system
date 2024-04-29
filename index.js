@@ -2,6 +2,12 @@
 const tabSection = document.querySelector(".section");
 const tabBar = document.querySelector("#tab-bar");
 const contentFrame = document.getElementById("iframe-content");
+const loadingImage = document.createElement('h1'); // Create an img element for the loading gif
+loadingImage.textContent = 'loading...'; // Replace with the path to your loading gif
+loadingImage.style.display = "block";
+loadingImage.setAttribute("class","blanktext")// Initially hide the loading gif
+document.body.appendChild(loadingImage);
+ // Add the loading gif to the body
 
 // Array to hold tab URLs
 const tabUrls = [];
@@ -24,6 +30,7 @@ function addTab() {
     const closeButton = document.createElement("button");
     closeButton.textContent = "x";
     closeButton.addEventListener("click", function() {
+        closeButton.setAttribute("class","closebtn")
         // Find the parent tab element of the close button
         const tab = this.parentNode;
         closeTab(tab); // Close tab when clicked
@@ -73,10 +80,34 @@ function setActiveTab(index) {
 }
 
 function updateContent(index = activeTabIndex) {
-    if (index === -1) return; // No active tab
+    if (index === -1) {
+       // Update the content of the iframe when it's empty
+contentFrame.onload = function() {
+    loadingImage.style.display = 'none'; // Hide loading text when content loads
+    if (!contentFrame.contentWindow.document.body.innerHTML.trim()) {
+        // If the iframe content is empty, show the default text
+        contentFrame.contentWindow.document.body.innerHTML = 'Search for a URL and press Enter to see content';
+    }
+};
+
+    }
 
     const url = tabUrls[index];
 
+    // Show loading gif
+    loadingImage.style.display = 'block';
+
+    // Change iframe content
+    contentFrame.onload = function() {
+        // Hide loading gif when content is loaded
+        loadingImage.style.display = 'none';
+    };
+    contentFrame.onerror = function() {
+        // Hide loading gif and show error message when URL is invalid
+        loadingImage.style.display = 'none';
+        contentFrame.contentWindow.document.body.innerHTML = 'Something wrong with the URL';
+    };
+   
     // Change iframe content
     contentFrame.src = url;
 
@@ -84,9 +115,9 @@ function updateContent(index = activeTabIndex) {
     const tabs = document.querySelectorAll('.tab');
     tabs.forEach((tab, idx) => {
         if (idx === index) {
-            tab.style.backgroundColor = '#cccccc'; // Active tab color
+            tab.style.backgroundColor = '#4cae4f'; // Active tab color
         } else {
-            tab.style.backgroundColor = '#f0f0f0'; // Inactive tab color
+            tab.style.backgroundColor = '#b8f5ba'; // Inactive tab color
         }
     });
 }
