@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Tab System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="tabs">
+        <div class="section">
+            <button id="add-tab" onclick="addTab()">+</button>
+            <div id="tab-bar">
+                <!-- Tabs will be dynamically added here -->
+            </div>
+        </div>
+        <div id="content">
+            <!-- Content of active tab will be displayed here -->
+            <iframe id="iframe-content" width="100%" height="800px" frameborder="0"></iframe>
+        </div>
+    </div>
+</body>
+<script src="index.js"></script>
+</html>
